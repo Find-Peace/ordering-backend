@@ -1,0 +1,123 @@
+### 1. 创建一个新菜品 (POST 请求)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "砂锅烩面",
+  "description": "来一碗羊汤砂锅烩面暖暖身子",
+  "price": 10.00,
+  "imageUrl": "http://example.com/images/gongbao.jpg"
+}
+
+### 2. 查询所有菜品 (GET 请求，用于验证)
+GET http://localhost:8080/api/products
+
+### 3. 更新 ID 为 ? 的菜品 (PUT 请求)
+# (我们将“煎扒鱼”的价格从 70 改为 88)
+PUT http://localhost:8080/api/products/4
+Content-Type: application/json
+
+{
+  "name": "煎扒鱼 (精品)",
+  "description": "经典红烧，味道醇厚，已降价",
+  "price": 70.0,
+  "imageUrl": "http://example.com/images/gongbao.jpg",
+  "available": true
+}
+
+### 4. 删除 ID 为 ? 的菜品 (DELETE 请求)
+DELETE http://localhost:8080/api/products/3
+
+### 5. (最终验证) 再次查询所有菜品
+GET http://localhost:8080/api/products
+
+### ———————————— 分类测试 ————————————
+
+### 7. 创建分类
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+{
+  "name": "面类"
+}
+
+### 8. 查询所有分类 (GET)
+GET http://localhost:8080/api/categories
+
+### 删除分类
+DELETE http://localhost:8080/api/categories/1
+
+### ———————————— 关联测试 ————————————
+
+### 9. 创建一个“带分类”的菜品
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "酸辣绿豆芽",
+  "description": "猛火爆炒，酸辣开胃",
+  "price": 12.0,
+  "imageUrl": "http://example.com/images/gongbao.jpg",
+  "category": {
+    "id": 1
+  }
+}
+
+### 10. (筛选测试) 只查询“热菜”分类下的菜品 (ID=1)
+GET http://localhost:8080/api/products?categoryId=1
+
+
+### ———————————— 订单测试 ————————————
+
+### 11. (C) 提交一个新订单 (模拟购物车)
+# 购买 1 份 ID=4 的菜 和 2 份 ID=3 的菜
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+[
+  {
+    "productId": 4,
+    "quantity": 1
+  },
+  {
+    "productId": 3,
+    "quantity": 2
+  }
+]
+
+### 12. (R) 查询所有订单 (后台管理)
+GET http://localhost:8080/api/orders
+
+
+### ———————————— 订单重构与新功能测试 ————————————
+
+### 13. (C) 测试重构后的“创建订单”
+# (创建一个新订单, 购买 1 份 ID=? 的菜 和 2 份 ID=? 的菜)
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+[
+  {
+    "productId": 6,
+    "quantity": 2
+  },
+  {
+    "productId": 7,
+    "quantity": 1
+  }
+]
+
+### 14. (R) 测试重构后的“查询所有订单”
+GET http://localhost:8080/api/orders
+
+
+### 15. (U - 新功能) 更新订单状态
+# 假设我们刚创建的订单 ID 是 2 (请根据您的情况修改 ID)
+PATCH http://localhost:8080/api/orders/2/status
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+###
